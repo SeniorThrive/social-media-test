@@ -6,8 +6,8 @@ async function applyMigration() {
   try {
     console.log("Reading migration file...");
     
-    // Read the migration file
-    const migrationPath = join(process.cwd(), "supabase", "migrations", "create_communities_and_posts.sql");
+    // Read the migration file - updated to use the correct filename
+    const migrationPath = join(process.cwd(), "supabase", "migrations", "20250629155804_turquoise_shrine.sql");
     const migrationSQL = readFileSync(migrationPath, "utf8");
     
     console.log("Applying migration to database...");
