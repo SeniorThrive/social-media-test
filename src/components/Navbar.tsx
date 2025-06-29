@@ -1,74 +1,77 @@
 import { useState } from "react";
 import { Link } from "react-router";
-import { useAuth } from "../context/AuthContext";
+import { Button } from "./ui/Button";
+import { Avatar } from "./ui/Avatar";
+import { Typography } from "./ui/Typography";
 
 export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { signInWithGitHub, signOut, user } = useAuth();
+  
+  // Mock user data for now - will be replaced with actual auth later
+  const user = null; // Set to null to show signed-out state
+  const displayName = user?.user_metadata?.user_name || user?.email;
 
-  const displayName = user?.user_metadata.user_name || user?.email;
   return (
-    <nav className="fixed top-0 w-full z-40 bg-[rgba(10,10,10,0.8)] backdrop-blur-lg border-b border-white/10 shadow-lg">
-      <div className="max-w-5xl mx-auto px-4">
+    <nav className="fixed top-0 w-full z-40 bg-white/95 backdrop-blur-lg border-b border-st_taupe/20 shadow-sm">
+      <div className="max-w-6xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="font-mono text-xl font-bold text-white">
-            forum<span className="text-purple-500">.app</span>
+          <Link to="/" className="flex items-center space-x-2">
+            <Typography variant="h2" className="font-bold text-st_light_blue">
+              SeniorThrive
+            </Typography>
+            <Typography variant="caption" className="text-st_taupe">
+              Community
+            </Typography>
           </Link>
 
           {/* Desktop Links */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6">
             <Link
               to="/"
-              className="text-gray-300 hover:text-white transition-colors"
+              className="text-st_black hover:text-st_light_blue transition-colors font-medium"
             >
               Home
             </Link>
             <Link
               to="/create"
-              className="text-gray-300 hover:text-white transition-colors"
+              className="text-st_black hover:text-st_light_blue transition-colors font-medium"
             >
               Create Post
             </Link>
             <Link
               to="/communities"
-              className="text-gray-300 hover:text-white transition-colors"
+              className="text-st_black hover:text-st_light_blue transition-colors font-medium"
             >
               Communities
             </Link>
             <Link
               to="/community/create"
-              className="text-gray-300 hover:text-white transition-colors"
+              className="text-st_black hover:text-st_light_blue transition-colors font-medium"
             >
               Create Community
             </Link>
           </div>
 
           {/* Desktop Auth */}
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center space-x-4">
             {user ? (
-              <div className="flex items-center space-x-4">
-                {user.user_metadata?.avatar_url && (
-                  <img
-                    src={user.user_metadata.avatar_url}
-                    alt="User Avatar"
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                )}
-                <span className="text-gray-300">{displayName}</span>
-                <button
-                  onClick={signOut}
-                  className="bg-red-500 px-3 py-1 rounded"
-                >
+              <div className="flex items-center space-x-3">
+                <Avatar
+                  src={user.user_metadata?.avatar_url}
+                  alt="User Avatar"
+                  fallback={displayName}
+                />
+                <Typography variant="body" className="text-st_black">
+                  {displayName}
+                </Typography>
+                <Button variant="outline" size="sm">
                   Sign Out
-                </button>
+                </Button>
               </div>
             ) : (
-              <button
-                onClick={signInWithGitHub}
-                className="bg-blue-500 px-3 py-1 rounded"
-              >
-                Sign in with GitHub
-              </button>
+              <Button variant="primary" size="sm">
+                Sign In
+              </Button>
             )}
           </div>
 
@@ -76,7 +79,7 @@ export const Navbar = () => {
           <div className="md:hidden">
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
-              className="text-gray-300 focus:outline-none"
+              className="text-st_black focus:outline-none focus:ring-2 focus:ring-st_light_orange rounded-lg p-1"
               aria-label="Toggle menu"
             >
               <svg
@@ -109,32 +112,56 @@ export const Navbar = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-[rgba(10,10,10,0.9)]">
-          <div className="px-2 pt-2 pb-3 space-y-1">
+        <div className="md:hidden bg-white border-t border-st_taupe/20">
+          <div className="px-4 pt-2 pb-3 space-y-2">
             <Link
               to="/"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+              className="block px-3 py-2 rounded-lg text-body font-medium text-st_black hover:text-st_light_blue hover:bg-st_light_purple/10"
             >
               Home
             </Link>
             <Link
               to="/create"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+              className="block px-3 py-2 rounded-lg text-body font-medium text-st_black hover:text-st_light_blue hover:bg-st_light_purple/10"
             >
               Create Post
             </Link>
             <Link
               to="/communities"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+              className="block px-3 py-2 rounded-lg text-body font-medium text-st_black hover:text-st_light_blue hover:bg-st_light_purple/10"
             >
               Communities
             </Link>
             <Link
               to="/community/create"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-700"
+              className="block px-3 py-2 rounded-lg text-body font-medium text-st_black hover:text-st_light_blue hover:bg-st_light_purple/10"
             >
               Create Community
             </Link>
+            <div className="pt-2 border-t border-st_taupe/20">
+              {user ? (
+                <div className="flex items-center space-x-3 px-3 py-2">
+                  <Avatar
+                    src={user.user_metadata?.avatar_url}
+                    alt="User Avatar"
+                    fallback={displayName}
+                    size="sm"
+                  />
+                  <Typography variant="body" className="text-st_black flex-1">
+                    {displayName}
+                  </Typography>
+                  <Button variant="outline" size="sm">
+                    Sign Out
+                  </Button>
+                </div>
+              ) : (
+                <div className="px-3 py-2">
+                  <Button variant="primary" size="sm" className="w-full">
+                    Sign In
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
