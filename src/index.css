@@ -12,6 +12,7 @@
   body {
     font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
     color: var(--text-primary);
+    background-color: #f9fafb;
   }
 }
 
@@ -111,4 +112,18 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #316AA2;
+}
+
+/* Facebook-style card shadows */
+.shadow-facebook {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.shadow-facebook-hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Smooth focus states */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-st_light_blue focus:ring-offset-2;
 }

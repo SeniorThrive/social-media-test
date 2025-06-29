@@ -91,9 +91,9 @@ export const PostList = () => {
 
   if (isLoading) {
     return (
-      <div className="text-center py-8">
+      <div className="text-center py-12">
         <div className="animate-pulse">
-          <Typography variant="body" className="text-st_taupe">
+          <Typography variant="body" className="text-st_taupe text-lg">
             Loading posts...
           </Typography>
         </div>
@@ -103,11 +103,11 @@ export const PostList = () => {
 
   if (error) {
     return (
-      <div className="text-center py-8">
-        <Typography variant="body" className="text-st_dark_red mb-4">
+      <div className="text-center py-12">
+        <Typography variant="body" className="text-st_dark_red mb-6 text-lg">
           Unable to load posts
         </Typography>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {mockPosts.map((post) => (
             <PostItem post={post} key={post.id} />
           ))}
@@ -118,11 +118,11 @@ export const PostList = () => {
 
   if (!data || data.length === 0) {
     return (
-      <div className="text-center py-8">
-        <Typography variant="body" className="text-st_taupe mb-4">
+      <div className="text-center py-12">
+        <Typography variant="body" className="text-st_taupe mb-6 text-lg">
           No posts available yet.
         </Typography>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {mockPosts.map((post) => (
             <PostItem post={post} key={post.id} />
           ))}
@@ -132,7 +132,7 @@ export const PostList = () => {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
       {data.map((post) => (
         <PostItem post={post} key={post.id} />
       ))}
