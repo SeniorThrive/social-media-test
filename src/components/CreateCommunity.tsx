@@ -2,11 +2,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { supabase } from "../supabase-client";
+import { Button } from "./ui/Button";
+import { Input } from "./ui/Input";
+import { Textarea } from "./ui/Textarea";
+import { Typography } from "./ui/Typography";
 
 interface CommunityInput {
   name: string;
   description: string;
 }
+
 const createCommunity = async (community: CommunityInput) => {
   const { error, data } = await supabase.from("communities").insert(community);
 
@@ -32,43 +37,51 @@ export const CreateCommunity = () => {
     e.preventDefault();
     mutate({ name, description });
   };
+
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
-      <h2 className="text-6xl font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+      <Typography variant="h1" className="mb-6 text-center text-st_light_blue">
         Create New Community
-      </h2>
+      </Typography>
+      
       <div>
-        <label htmlFor="name" className="block mb-2 font-medium">
+        <Typography variant="body" className="block mb-2 font-medium text-st_black">
           Community Name
-        </label>
-        <input
+        </Typography>
+        <Input
           type="text"
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full border border-white/10 bg-transparent p-2 rounded"
           required
         />
       </div>
+      
       <div>
-        <label htmlFor="description" className="block mb-2 font-medium">
+        <Typography variant="body" className="block mb-2 font-medium text-st_black">
           Description
-        </label>
-        <textarea
+        </Typography>
+        <Textarea
           id="description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full border border-white/10 bg-transparent p-2 rounded"
           rows={3}
         />
       </div>
-      <button
+      
+      <Button
         type="submit"
-        className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer"
+        variant="primary"
+        disabled={isPending}
       >
         {isPending ? "Creating..." : "Create Community"}
-      </button>
-      {isError && <p className="text-red-500">Error creating community.</p>}
+      </Button>
+      
+      {isError && (
+        <Typography variant="caption" className="text-st_dark_red">
+          Error creating community.
+        </Typography>
+      )}
     </form>
   );
 };

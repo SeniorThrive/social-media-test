@@ -3,6 +3,10 @@ import { Comment } from "./CommentSection";
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../supabase-client";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Card } from "./ui/Card";
+import { Button } from "./ui/Button";
+import { Textarea } from "./ui/Textarea";
+import { Typography } from "./ui/Typography";
 
 interface Props {
   comment: Comment & {
@@ -64,41 +68,50 @@ export const CommentItem = ({ comment, postId }: Props) => {
   };
 
   return (
-    <div className="pl-4 border-l border-white/10">
-      <div className="mb-2">
-        <div className="flex items-center space-x-2">
-          {/* Display the commenter's username */}
-          <span className="text-sm font-bold text-blue-400">
+    <div className="pl-4 border-l border-st_taupe/20">
+      <Card className="mb-2">
+        <div className="flex items-center space-x-2 mb-2">
+          <Typography variant="caption" className="font-bold text-st_light_blue">
             {comment.author}
-          </span>
-          <span className="text-xs text-gray-500">
+          </Typography>
+          <Typography variant="caption" className="text-st_taupe">
             {new Date(comment.created_at).toLocaleString()}
-          </span>
+          </Typography>
         </div>
-        <p className="text-gray-300">{comment.content}</p>
-        <button
+        <Typography variant="body" className="text-st_black mb-2">
+          {comment.content}
+        </Typography>
+        <Button
+          variant="outline"
+          size="sm"
           onClick={() => setShowReply((prev) => !prev)}
-          className="text-blue-500 text-sm mt-1"
         >
           {showReply ? "Cancel" : "Reply"}
-        </button>
-      </div>
+        </Button>
+      </Card>
+
       {showReply && user && (
         <form onSubmit={handleReplySubmit} className="mb-2">
-          <textarea
+          <Textarea
             value={replyText}
             onChange={(e) => setReplyText(e.target.value)}
-            className="w-full border border-white/10 bg-transparent p-2 rounded"
             placeholder="Write a reply..."
             rows={2}
+            className="mb-2"
           />
-          <button
+          <Button
             type="submit"
-            className="mt-1 bg-blue-500 text-white px-3 py-1 rounded"
+            variant="primary"
+            size="sm"
+            disabled={isPending}
           >
             {isPending ? "Posting..." : "Post Reply"}
-          </button>
-          {isError && <p className="text-red-500">Error posting reply.</p>}
+          </Button>
+          {isError && (
+            <Typography variant="caption" className="text-st_dark_red mt-2">
+              Error posting reply.
+            </Typography>
+          )}
         </form>
       )}
 
@@ -106,6 +119,7 @@ export const CommentItem = ({ comment, postId }: Props) => {
         <div>
           <button
             onClick={() => setIsCollapsed((prev) => !prev)}
+            className="text-st_light_blue hover:text-st_dark_blue mb-2"
             title={isCollapsed ? "Hide Replies" : "Show Replies"}
           >
             {isCollapsed ? (

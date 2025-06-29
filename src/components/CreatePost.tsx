@@ -3,6 +3,10 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
 import { useAuth } from "../context/AuthContext";
 import { Community, fetchCommunities } from "./CommunityList";
+import { Button } from "./ui/Button";
+import { Input } from "./ui/Input";
+import { Textarea } from "./ui/Textarea";
+import { Typography } from "./ui/Typography";
 
 interface PostInput {
   title: string;
@@ -37,7 +41,6 @@ export const CreatePost = () => {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [communityId, setCommunityId] = useState<number | null>(null);
-
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const { user } = useAuth();
@@ -81,36 +84,41 @@ export const CreatePost = () => {
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-4">
       <div>
-        <label htmlFor="title" className="block mb-2 font-medium">
+        <Typography variant="body" className="block mb-2 font-medium text-st_black">
           Title
-        </label>
-        <input
+        </Typography>
+        <Input
           type="text"
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full border border-white/10 bg-transparent p-2 rounded"
           required
         />
       </div>
+      
       <div>
-        <label htmlFor="content" className="block mb-2 font-medium">
+        <Typography variant="body" className="block mb-2 font-medium text-st_black">
           Content
-        </label>
-        <textarea
+        </Typography>
+        <Textarea
           id="content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="w-full border border-white/10 bg-transparent p-2 rounded"
           rows={5}
           required
         />
       </div>
 
       <div>
-        <label> Select Community</label>
-        <select id="community" onChange={handleCommunityChange}>
-          <option value={""}> -- Choose a Community -- </option>
+        <Typography variant="body" className="block mb-2 font-medium text-st_black">
+          Select Community
+        </Typography>
+        <select 
+          id="community" 
+          onChange={handleCommunityChange}
+          className="w-full border border-st_taupe rounded-lg py-2 px-3 text-body text-st_black focus:outline-none focus:ring-2 focus:ring-st_light_blue focus:border-transparent"
+        >
+          <option value={""}>-- Choose a Community --</option>
           {communities?.map((community, key) => (
             <option key={key} value={community.id}>
               {community.name}
@@ -120,25 +128,31 @@ export const CreatePost = () => {
       </div>
 
       <div>
-        <label htmlFor="image" className="block mb-2 font-medium">
+        <Typography variant="body" className="block mb-2 font-medium text-st_black">
           Upload Image
-        </label>
+        </Typography>
         <input
           type="file"
           id="image"
           accept="image/*"
           onChange={handleFileChange}
-          className="w-full text-gray-200"
+          className="w-full text-st_black file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-st_light_blue file:text-white hover:file:bg-st_dark_blue"
         />
       </div>
-      <button
+      
+      <Button
         type="submit"
-        className="bg-purple-500 text-white px-4 py-2 rounded cursor-pointer"
+        variant="primary"
+        disabled={isPending}
       >
         {isPending ? "Creating..." : "Create Post"}
-      </button>
+      </Button>
 
-      {isError && <p className="text-red-500"> Error creating post.</p>}
+      {isError && (
+        <Typography variant="caption" className="text-st_dark_red">
+          Error creating post.
+        </Typography>
+      )}
     </form>
   );
 };

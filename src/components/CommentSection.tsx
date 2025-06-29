@@ -3,6 +3,9 @@ import { useAuth } from "../context/AuthContext";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
 import { CommentItem } from "./CommentItem";
+import { Button } from "./ui/Button";
+import { Textarea } from "./ui/Textarea";
+import { Typography } from "./ui/Typography";
 
 interface Props {
   postId: number;
@@ -116,42 +119,56 @@ export const CommentSection = ({ postId }: Props) => {
   };
 
   if (isLoading) {
-    return <div> Loading comments...</div>;
+    return (
+      <Typography variant="body" className="text-center py-4">
+        Loading comments...
+      </Typography>
+    );
   }
 
   if (error) {
-    return <div> Error: {error.message}</div>;
+    return (
+      <Typography variant="body" className="text-center text-st_dark_red py-4">
+        Error: {error.message}
+      </Typography>
+    );
   }
 
   const commentTree = comments ? buildCommentTree(comments) : [];
 
   return (
     <div className="mt-6">
-      <h3 className="text-2xl font-semibold mb-4">Comments</h3>
+      <Typography variant="h2" className="mb-4">
+        Comments
+      </Typography>
+      
       {/* Create Comment Section */}
       {user ? (
         <form onSubmit={handleSubmit} className="mb-4">
-          <textarea
+          <Textarea
             value={newCommentText}
             onChange={(e) => setNewCommentText(e.target.value)}
-            className="w-full border border-white/10 bg-transparent p-2 rounded"
             placeholder="Write a comment..."
             rows={3}
+            className="mb-2"
           />
-          <button
+          <Button
             type="submit"
-            className="mt-2 bg-purple-500 text-white px-4 py-2 rounded cursor-pointer"
+            variant="primary"
+            disabled={isPending}
           >
             {isPending ? "Posting..." : "Post Comment"}
-          </button>
+          </Button>
           {isError && (
-            <p className="text-red-500 mt-2">Error posting comment.</p>
+            <Typography variant="caption" className="text-st_dark_red mt-2">
+              Error posting comment.
+            </Typography>
           )}
         </form>
       ) : (
-        <p className="mb-4 text-gray-600">
+        <Typography variant="body" className="text-st_taupe mb-4">
           You must be logged in to post a comment.
-        </p>
+        </Typography>
       )}
 
       {/* Comments Display Section */}

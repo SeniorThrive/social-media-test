@@ -1,6 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
 import { useAuth } from "../context/AuthContext";
+import { Button } from "./ui/Button";
+import { Typography } from "./ui/Typography";
 
 interface Props {
   postId: number;
@@ -58,7 +60,6 @@ const fetchVotes = async (postId: number): Promise<Vote[]> => {
 
 export const LikeButton = ({ postId }: Props) => {
   const { user } = useAuth();
-
   const queryClient = useQueryClient();
 
   const {
@@ -76,18 +77,25 @@ export const LikeButton = ({ postId }: Props) => {
       if (!user) throw new Error("You must be logged in to Vote!");
       return vote(voteValue, postId, user.id);
     },
-
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["votes", postId] });
     },
   });
 
   if (isLoading) {
-    return <div> Loading votes...</div>;
+    return (
+      <Typography variant="body">
+        Loading votes...
+      </Typography>
+    );
   }
 
   if (error) {
-    return <div> Error: {error.message}</div>;
+    return (
+      <Typography variant="body" className="text-st_dark_red">
+        Error: {error.message}
+      </Typography>
+    );
   }
 
   const likes = votes?.filter((v) => v.vote === 1).length || 0;
@@ -96,22 +104,24 @@ export const LikeButton = ({ postId }: Props) => {
 
   return (
     <div className="flex items-center space-x-4 my-4">
-      <button
+      <Button
+        variant={userVote === 1 ? "primary" : "outline"}
+        size="sm"
         onClick={() => mutate(1)}
-        className={`px-3 py-1 cursor-pointer rounded transition-colors duration-150 ${
-          userVote === 1 ? "bg-green-500 text-white" : "bg-gray-200 text-black"
-        }`}
+        className="flex items-center space-x-1"
       >
-        👍 {likes}
-      </button>
-      <button
+        <span>👍</span>
+        <span>{likes}</span>
+      </Button>
+      <Button
+        variant={userVote === -1 ? "primary" : "outline"}
+        size="sm"
         onClick={() => mutate(-1)}
-        className={`px-3 py-1 cursor-pointer rounded transition-colors duration-150 ${
-          userVote === -1 ? "bg-red-500 text-white" : "bg-gray-200 text-black"
-        }`}
+        className="flex items-center space-x-1"
       >
-        👎 {dislikes}
-      </button>
+        <span>👎</span>
+        <span>{dislikes}</span>
+      </Button>
     </div>
   );
 };
