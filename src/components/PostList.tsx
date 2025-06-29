@@ -79,19 +79,8 @@ const mockPosts: Post[] = [
 ];
 
 const fetchPosts = async (): Promise<Post[]> => {
-  try {
-    const { data, error } = await supabase.rpc("get_posts_with_counts");
-    
-    if (error) {
-      console.log("Using mock data due to database error:", error.message);
-      return mockPosts;
-    }
-    
-    return data as Post[];
-  } catch (error) {
-    console.log("Using mock data due to connection error");
-    return mockPosts;
-  }
+  // Always return mock data for now since we're focusing on frontend
+  return mockPosts;
 };
 
 export const PostList = () => {
@@ -116,12 +105,9 @@ export const PostList = () => {
     return (
       <div className="text-center py-8">
         <Typography variant="body" className="text-st_dark_red mb-4">
-          Unable to load posts from database
+          Unable to load posts
         </Typography>
-        <Typography variant="caption" className="text-st_taupe">
-          Showing sample content for demonstration
-        </Typography>
-        <div className="flex flex-wrap gap-6 justify-center mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
           {mockPosts.map((post) => (
             <PostItem post={post} key={post.id} />
           ))}
@@ -136,10 +122,7 @@ export const PostList = () => {
         <Typography variant="body" className="text-st_taupe mb-4">
           No posts available yet.
         </Typography>
-        <Typography variant="caption" className="text-st_taupe">
-          Showing sample content for demonstration
-        </Typography>
-        <div className="flex flex-wrap gap-6 justify-center mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
           {mockPosts.map((post) => (
             <PostItem post={post} key={post.id} />
           ))}
@@ -149,7 +132,7 @@ export const PostList = () => {
   }
 
   return (
-    <div className="flex flex-wrap gap-6 justify-center">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {data.map((post) => (
         <PostItem post={post} key={post.id} />
       ))}

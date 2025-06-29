@@ -23,7 +23,7 @@ export const PostItem = ({ post }: Props) => {
     <div className="relative group">
       <div className="absolute -inset-1 rounded-card bg-gradient-to-r from-st_light_purple to-st_light_blue blur-sm opacity-0 group-hover:opacity-50 transition duration-300 pointer-events-none"></div>
       <Link to={`/post/${post.id}`} className="block relative z-10">
-        <div className="w-80 bg-white border border-st_taupe/20 rounded-card text-st_black flex flex-col overflow-hidden transition-all duration-300 group-hover:bg-gray-50 group-hover:shadow-lg group-hover:border-st_light_blue/30">
+        <div className="bg-white border border-st_taupe/20 rounded-card text-st_black flex flex-col overflow-hidden transition-all duration-300 group-hover:bg-gray-50 group-hover:shadow-lg group-hover:border-st_light_blue/30 h-full">
           
           {/* Image Banner */}
           <div className="relative overflow-hidden">
