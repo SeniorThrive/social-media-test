@@ -4,6 +4,9 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  safelist: [
+    'focus:ring-st_light_blue'
+  ],
   theme: {
     extend: {
       colors: {
