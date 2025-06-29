@@ -33,44 +33,6 @@
   }
 }
 
-@layer components {
-  .fb-card {
-    @apply bg-white rounded-lg shadow-sm border border-gray-200;
-  }
-
-  .fb-card-hover {
-    @apply transition-all duration-200 hover:shadow-md;
-  }
-
-  .fb-button-primary {
-    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
-  }
-
-  .fb-button-secondary {
-    @apply bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
-  }
-
-  .fb-input {
-    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 placeholder-gray-500;
-  }
-
-  .fb-avatar {
-    @apply rounded-full border-2 border-white shadow-sm;
-  }
-
-  .fb-text-primary {
-    @apply text-gray-900 font-medium;
-  }
-
-  .fb-text-secondary {
-    @apply text-gray-600;
-  }
-
-  .fb-text-tertiary {
-    @apply text-gray-500 text-sm;
-  }
-}
-
 @layer utilities {
   .line-clamp-1 {
     overflow: hidden;
