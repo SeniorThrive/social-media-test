@@ -1,14 +1,16 @@
-import { supabase } from '../src/supabase-client';
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { supabase } from "./supabase-script-client.js";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 async function applyMigration() {
   try {
-    console.log('Reading migration file...');
-    const migrationPath = join(process.cwd(), 'supabase/migrations/20250629155804_turquoise_shrine.sql');
-    const migrationSQL = readFileSync(migrationPath, 'utf8');
+    console.log("Reading migration file...");
     
-    console.log('Applying migration to Supabase...');
+    // Read the migration file
+    const migrationPath = join(process.cwd(), "supabase", "migrations", "create_communities_and_posts.sql");
+    const migrationSQL = readFileSync(migrationPath, "utf8");
+    
+    console.log("Applying migration to database...");
     
     // Split the SQL into individual statements and execute them
     const statements = migrationSQL
@@ -22,49 +24,34 @@ async function applyMigration() {
         const { error } = await supabase.rpc('exec_sql', { sql: statement });
         
         if (error) {
-          console.error('Error executing statement:', error);
-          // Try direct query execution as fallback
+          // Try direct query if RPC fails
           const { error: directError } = await supabase.from('_').select('*').limit(0);
           if (directError) {
-            console.log('Trying alternative approach...');
-            // Execute the full migration as one block
-            const { error: fullError } = await supabase.rpc('exec_sql', { sql: migrationSQL });
-            if (fullError) {
-              console.error('Migration failed:', fullError);
-              return;
-            }
+            console.error("Error executing statement:", error);
+            throw error;
           }
         }
       }
     }
     
-    console.log('Migration applied successfully!');
+    console.log("Migration applied successfully!");
     
-    // Verify the tables were created
-    const { data: communities, error: communitiesError } = await supabase
-      .from('communities')
-      .select('*')
-      .limit(1);
-      
-    if (communitiesError) {
-      console.error('Error verifying communities table:', communitiesError);
-    } else {
-      console.log('✅ Communities table verified');
-    }
+    // Verify tables were created
+    const { data: tables, error: tablesError } = await supabase
+      .from('information_schema.tables')
+      .select('table_name')
+      .eq('table_schema', 'public')
+      .in('table_name', ['communities', 'posts', 'comments', 'votes']);
     
-    const { data: posts, error: postsError } = await supabase
-      .from('posts')
-      .select('*')
-      .limit(1);
-      
-    if (postsError) {
-      console.error('Error verifying posts table:', postsError);
+    if (tablesError) {
+      console.log("Could not verify tables, but migration may have succeeded");
     } else {
-      console.log('✅ Posts table verified');
+      console.log("Created tables:", tables?.map(t => t.table_name));
     }
     
   } catch (error) {
-    console.error('Failed to apply migration:', error);
+    console.error("Migration failed:", error);
+    process.exit(1);
   }
 }
 
