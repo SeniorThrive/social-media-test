@@ -125,5 +125,11 @@
 
 /* Smooth focus states */
 .focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-st_light_blue focus:ring-offset-2;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus-ring:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #3b82f6, 0 0 0 4px rgba(59, 130, 246, 0.1);
 }
