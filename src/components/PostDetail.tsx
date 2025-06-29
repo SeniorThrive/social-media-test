@@ -3,6 +3,7 @@ import { Post } from "./PostList";
 import { supabase } from "../supabase-client";
 import { LikeButton } from "./LikeButton";
 import { CommentSection } from "./CommentSection";
+import { Typography } from "./ui/Typography";
 
 interface Props {
   postId: number;
@@ -27,29 +28,42 @@ export const PostDetail = ({ postId }: Props) => {
   });
 
   if (isLoading) {
-    return <div> Loading posts...</div>;
+    return (
+      <Typography variant="body">
+        Loading posts...
+      </Typography>
+    );
   }
 
   if (error) {
-    return <div> Error: {error.message}</div>;
+    return (
+      <Typography variant="body" className="text-st_dark_red">
+        Error: {error.message}
+      </Typography>
+    );
   }
 
   return (
     <div className="space-y-6">
-      <h2 className="text-6xl font-bold mb-6 text-center bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+      <Typography variant="h1" className="mb-6 text-center text-st_light_blue">
         {data?.title}
-      </h2>
+      </Typography>
+      
       {data?.image_url && (
         <img
           src={data.image_url}
           alt={data?.title}
-          className="mt-4 rounded object-cover w-full h-64"
+          className="mt-4 rounded-lg object-cover w-full h-64"
         />
       )}
-      <p className="text-gray-400">{data?.content}</p>
-      <p className="text-gray-500 text-sm">
+      
+      <Typography variant="body" className="text-st_black">
+        {data?.content}
+      </Typography>
+      
+      <Typography variant="caption" className="text-st_taupe">
         Posted on: {new Date(data!.created_at).toLocaleDateString()}
-      </p>
+      </Typography>
 
       <LikeButton postId={postId} />
       <CommentSection postId={postId} />

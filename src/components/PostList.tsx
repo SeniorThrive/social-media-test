@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "../supabase-client";
 import { PostItem } from "./PostItem";
+import { Typography } from "./ui/Typography";
 
 export interface Post {
   id: number;
@@ -28,11 +29,19 @@ export const PostList = () => {
   });
 
   if (isLoading) {
-    return <div> Loading posts...</div>;
+    return (
+      <Typography variant="body">
+        Loading posts...
+      </Typography>
+    );
   }
 
   if (error) {
-    return <div> Error: {error.message}</div>;
+    return (
+      <Typography variant="body" className="text-st_dark_red">
+        Error: {error.message}
+      </Typography>
+    );
   }
 
   console.log(data);
