@@ -5,26 +5,10 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --text-primary: #1c1e21;
-    --text-secondary: #65676b;
-    --text-tertiary: #8a8d91;
-    --bg-primary: #f0f2f5;
-    --bg-secondary: #ffffff;
-    --border-color: #dadde1;
-    --hover-overlay: rgba(0, 0, 0, 0.05);
-    --blue-primary: #1877f2;
-    --blue-hover: #166fe5;
-    --green-primary: #42b883;
-    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.1);
-    --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.1);
-    --shadow-3: 0 8px 16px rgba(0, 0, 0, 0.15);
-  }
-  
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    color: var(--text-primary);
-    background-color: var(--bg-primary);
+    color: #1c1e21;
+    background-color: #f0f2f5;
     line-height: 1.34;
   }
 
@@ -53,12 +37,6 @@
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
-  }
-
-  .transition-all {
-    transition-property: all;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
   }
 
   .shadow-facebook {
@@ -91,38 +69,4 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
-}
-
-/* Focus states */
-.focus-ring {
-  outline: 2px solid transparent;
-  outline-offset: 2px;
-}
-
-.focus-ring:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #1877f2, 0 0 0 4px rgba(24, 119, 242, 0.1);
-}
-
-/* Hover effects */
-.hover-overlay {
-  position: relative;
-  overflow: hidden;
-}
-
-.hover-overlay::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.05);
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
-}
-
-.hover-overlay:hover::before {
-  opacity: 1;
 }

@@ -5,7 +5,4 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   base: process.env.VITE_BASE_PATH || "/social-media-vite-supabase",
-  css: {
-    postcss: './postcss.config.cjs',
-  },
 });
