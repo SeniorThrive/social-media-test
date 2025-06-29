@@ -9,9 +9,9 @@ import { CommunityPage } from "./pages/CommunityPage";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50 text-st_black font-atkinson transition-opacity duration-700">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="container mx-auto px-4 py-6 max-w-7xl pt-20">
+      <div className="pt-14">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/create" element={<CreatePostPage />} />

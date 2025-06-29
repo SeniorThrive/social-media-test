@@ -10,6 +10,7 @@ interface InputProps {
   className?: string;
   id?: string;
   name?: string;
+  error?: boolean;
 }
 
 export const Input: React.FC<InputProps> = ({
@@ -22,7 +23,14 @@ export const Input: React.FC<InputProps> = ({
   className = '',
   id,
   name,
+  error = false,
 }) => {
+  const baseClasses = 'w-full px-3 py-2 text-sm bg-white border rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-0 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed';
+  
+  const stateClasses = error 
+    ? 'border-red-300 focus:border-red-500 focus:ring-red-500' 
+    : 'border-gray-300 focus:border-blue-500 focus:ring-blue-500';
+
   return (
     <input
       type={type}
@@ -33,7 +41,7 @@ export const Input: React.FC<InputProps> = ({
       onChange={onChange}
       disabled={disabled}
       required={required}
-      className={`w-full border border-st_taupe rounded-lg py-2 px-3 text-body text-st_black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-st_light_blue focus:border-transparent disabled:bg-gray-100 disabled:text-gray-500 ${className}`}
+      className={`${baseClasses} ${stateClasses} ${className}`}
     />
   );
 };

@@ -4,17 +4,30 @@ interface CardProps {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
+  variant?: 'default' | 'elevated' | 'interactive';
 }
 
-export const Card: React.FC<CardProps> = ({ children, className = '', onClick }) => {
+export const Card: React.FC<CardProps> = ({ 
+  children, 
+  className = '', 
+  onClick,
+  variant = 'default'
+}) => {
+  const baseClasses = 'bg-white rounded-lg border border-gray-200';
+  
+  const variantClasses = {
+    default: 'shadow-facebook',
+    elevated: 'shadow-facebook-elevated',
+    interactive: 'shadow-facebook hover:shadow-facebook-hover transition-shadow duration-200 cursor-pointer'
+  };
+
+  const classes = `${baseClasses} ${variantClasses[variant]} ${className}`;
+
   return (
-    <div
-      className={`bg-white rounded-card shadow-card p-4 mb-4 ${className} ${
-        onClick ? 'cursor-pointer hover:shadow-lg transition-shadow duration-200' : ''
-      }`}
-      onClick={onClick}
-    >
-      {children}
+    <div className={classes} onClick={onClick}>
+      <div className="p-4">
+        {children}
+      </div>
     </div>
   );
 };

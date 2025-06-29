@@ -2,7 +2,7 @@ import React from 'react';
 
 interface ButtonProps {
   children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'accent' | 'outline';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   disabled?: boolean;
   onClick?: () => void;
@@ -19,19 +19,19 @@ export const Button: React.FC<ButtonProps> = ({
   type = 'button',
   className = '',
 }) => {
-  const baseClasses = 'rounded-xl border-none font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-st_light_orange focus:ring-offset-2';
+  const baseClasses = 'inline-flex items-center justify-center font-medium rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
   
   const variantClasses = {
-    primary: 'bg-st_light_blue text-white hover:bg-st_dark_blue disabled:bg-gray-300',
-    secondary: 'bg-st_dark_blue text-white hover:bg-st_light_blue disabled:bg-gray-300',
-    accent: 'bg-st_light_orange text-white hover:bg-orange-600 disabled:bg-gray-300',
-    outline: 'bg-transparent border-2 border-st_light_blue text-st_light_blue hover:bg-st_light_blue hover:text-white disabled:border-gray-300 disabled:text-gray-300',
+    primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
+    secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500',
+    ghost: 'text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
+    outline: 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-blue-500',
   };
 
   const sizeClasses = {
-    sm: 'py-1 px-3 text-caption',
-    md: 'py-2 px-4 text-body',
-    lg: 'py-3 px-6 text-body',
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-4 py-2 text-sm',
+    lg: 'px-6 py-3 text-base',
   };
 
   return (

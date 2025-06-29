@@ -11,59 +11,63 @@ export const Navbar = () => {
   const displayName = user?.user_metadata?.user_name || user?.email;
 
   return (
-    <nav className="fixed top-0 w-full z-40 bg-white/95 backdrop-blur-lg border-b border-st_taupe/20 shadow-sm">
+    <nav className="fixed top-0 w-full z-50 bg-white border-b border-gray-200 shadow-sm">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-14">
+          {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <Typography variant="h2" className="font-bold text-st_light_blue">
+            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+              <Typography variant="body" className="text-white font-bold text-sm">
+                ST
+              </Typography>
+            </div>
+            <Typography variant="h3" className="font-bold text-gray-900">
               SeniorThrive
-            </Typography>
-            <Typography variant="caption" className="text-st_taupe">
-              Community
             </Typography>
           </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center space-x-6">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-1">
             <Link
               to="/"
-              className="text-st_black hover:text-st_light_blue transition-colors font-medium"
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
             >
               Home
             </Link>
             <Link
               to="/create"
-              className="text-st_black hover:text-st_light_blue transition-colors font-medium"
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
             >
               Create Post
             </Link>
             <Link
               to="/communities"
-              className="text-st_black hover:text-st_light_blue transition-colors font-medium"
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
             >
               Communities
             </Link>
             <Link
               to="/community/create"
-              className="text-st_black hover:text-st_light_blue transition-colors font-medium"
+              className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
             >
               Create Community
             </Link>
           </div>
 
           {/* Desktop Auth */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-3">
             {user ? (
               <div className="flex items-center space-x-3">
                 <Avatar
                   src={user.user_metadata?.avatar_url}
                   alt="User Avatar"
                   fallback={displayName}
+                  size="sm"
                 />
-                <Typography variant="body" className="text-st_black">
+                <Typography variant="body" className="text-gray-900 font-medium">
                   {displayName}
                 </Typography>
-                <Button variant="outline" size="sm" onClick={signOut}>
+                <Button variant="ghost" size="sm" onClick={signOut}>
                   Sign Out
                 </Button>
               </div>
@@ -78,15 +82,14 @@ export const Navbar = () => {
           <div className="md:hidden">
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
-              className="text-st_black focus:outline-none focus:ring-2 focus:ring-st_light_orange rounded-lg p-1"
+              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors"
               aria-label="Toggle menu"
             >
               <svg
-                className="w-6 h-6"
+                className="w-5 h-5"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
               >
                 {menuOpen ? (
                   <path
@@ -111,45 +114,52 @@ export const Navbar = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-st_taupe/20">
-          <div className="px-4 pt-2 pb-3 space-y-2">
+        <div className="md:hidden bg-white border-t border-gray-200">
+          <div className="px-4 py-2 space-y-1">
             <Link
               to="/"
-              className="block px-3 py-2 rounded-lg text-body font-medium text-st_black hover:text-st_light_blue hover:bg-st_light_purple/10"
+              className="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+              onClick={() => setMenuOpen(false)}
             >
               Home
             </Link>
             <Link
               to="/create"
-              className="block px-3 py-2 rounded-lg text-body font-medium text-st_black hover:text-st_light_blue hover:bg-st_light_purple/10"
+              className="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+              onClick={() => setMenuOpen(false)}
             >
               Create Post
             </Link>
             <Link
               to="/communities"
-              className="block px-3 py-2 rounded-lg text-body font-medium text-st_black hover:text-st_light_blue hover:bg-st_light_purple/10"
+              className="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+              onClick={() => setMenuOpen(false)}
             >
               Communities
             </Link>
             <Link
               to="/community/create"
-              className="block px-3 py-2 rounded-lg text-body font-medium text-st_black hover:text-st_light_blue hover:bg-st_light_purple/10"
+              className="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+              onClick={() => setMenuOpen(false)}
             >
               Create Community
             </Link>
-            <div className="pt-2 border-t border-st_taupe/20">
+            
+            <div className="pt-2 border-t border-gray-200">
               {user ? (
-                <div className="flex items-center space-x-3 px-3 py-2">
-                  <Avatar
-                    src={user.user_metadata?.avatar_url}
-                    alt="User Avatar"
-                    fallback={displayName}
-                    size="sm"
-                  />
-                  <Typography variant="body" className="text-st_black flex-1">
-                    {displayName}
-                  </Typography>
-                  <Button variant="outline" size="sm" onClick={signOut}>
+                <div className="flex items-center justify-between px-3 py-2">
+                  <div className="flex items-center space-x-3">
+                    <Avatar
+                      src={user.user_metadata?.avatar_url}
+                      alt="User Avatar"
+                      fallback={displayName}
+                      size="sm"
+                    />
+                    <Typography variant="body" className="text-gray-900 font-medium">
+                      {displayName}
+                    </Typography>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={signOut}>
                     Sign Out
                   </Button>
                 </div>

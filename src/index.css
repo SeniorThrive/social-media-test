@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,42 +6,72 @@
 
 @layer base {
   :root {
-    --text-primary: #1A0D0A;
+    --text-primary: #1c1e21;
+    --text-secondary: #65676b;
+    --text-tertiary: #8a8d91;
+    --bg-primary: #f0f2f5;
+    --bg-secondary: #ffffff;
+    --border-color: #dadde1;
+    --hover-overlay: rgba(0, 0, 0, 0.05);
+    --blue-primary: #1877f2;
+    --blue-hover: #166fe5;
+    --green-primary: #42b883;
+    --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.1);
+    --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-3: 0 8px 16px rgba(0, 0, 0, 0.15);
   }
   
   body {
-    font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     color: var(--text-primary);
-    background-color: #f9fafb;
+    background-color: var(--bg-primary);
+    line-height: 1.34;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  .fb-card {
+    @apply bg-white rounded-lg shadow-sm border border-gray-200;
+  }
+
+  .fb-card-hover {
+    @apply transition-all duration-200 hover:shadow-md;
+  }
+
+  .fb-button-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  }
+
+  .fb-button-secondary {
+    @apply bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium px-4 py-2 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2;
+  }
+
+  .fb-input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-gray-900 placeholder-gray-500;
+  }
+
+  .fb-avatar {
+    @apply rounded-full border-2 border-white shadow-sm;
+  }
+
+  .fb-text-primary {
+    @apply text-gray-900 font-medium;
+  }
+
+  .fb-text-secondary {
+    @apply text-gray-600;
+  }
+
+  .fb-text-tertiary {
+    @apply text-gray-500 text-sm;
   }
 }
 
 @layer utilities {
-  @keyframes blink {
-    0%,
-    100% {
-      opacity: 1;
-    }
-    50% {
-      opacity: 0;
-    }
-  }
-  .animate-blink {
-    animation: blink 0.8s step-end infinite;
-  }
-  @keyframes loading {
-    0% {
-      transform: translateX(-100%);
-    }
-    100% {
-      transform: translateX(250%);
-    }
-  }
-  .animate-loading-bar {
-    animation: loading 0.8s ease infinite;
-  }
-
-  /* Text truncation utilities */
   .line-clamp-1 {
     overflow: hidden;
     display: -webkit-box;
@@ -63,36 +93,23 @@
     -webkit-line-clamp: 3;
   }
 
-  /* Smooth transitions */
   .transition-all {
     transition-property: all;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
   }
-}
 
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
+  .shadow-facebook {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
 
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
+  .shadow-facebook-hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
 
-/* Enhanced hover effects */
-.group:hover .group-hover\:scale-105 {
-  transform: scale(1.05);
-}
-
-/* Gradient text effect */
-.gradient-text {
-  background: linear-gradient(135deg, #3762D4, #AE7CEC);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  .shadow-facebook-elevated {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
 }
 
 /* Custom scrollbar */
@@ -106,24 +123,15 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3762D4;
+  background: #c1c1c1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #316AA2;
+  background: #a8a8a8;
 }
 
-/* Facebook-style card shadows */
-.shadow-facebook {
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.shadow-facebook-hover {
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-}
-
-/* Smooth focus states */
+/* Focus states */
 .focus-ring {
   outline: 2px solid transparent;
   outline-offset: 2px;
@@ -131,5 +139,28 @@
 
 .focus-ring:focus {
   outline: none;
-  box-shadow: 0 0 0 2px #3b82f6, 0 0 0 4px rgba(59, 130, 246, 0.1);
+  box-shadow: 0 0 0 2px #1877f2, 0 0 0 4px rgba(24, 119, 242, 0.1);
+}
+
+/* Hover effects */
+.hover-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.hover-overlay::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.05);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.hover-overlay:hover::before {
+  opacity: 1;
 }
