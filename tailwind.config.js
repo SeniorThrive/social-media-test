@@ -5,6 +5,12 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    ringColor: ({ theme }) => ({
+      ...theme('colors'),
+    }),
+    ringOffsetColor: ({ theme }) => ({
+      ...theme('colors'),
+    }),
     extend: {
       colors: {
         st_light_blue: '#3762D4',
@@ -16,8 +22,6 @@ export default {
         st_dark_red: '#B24233',
         st_black: '#1A0D0A',
       },
-      ringColor: ({ theme }) => theme('colors'),
-      ringOffsetColor: ({ theme }) => theme('colors'),
       fontFamily: {
         'atkinson': ['Atkinson Hyperlegible', 'system-ui', 'sans-serif'],
       },
