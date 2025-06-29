@@ -5,9 +5,13 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --text-primary: theme('colors.gray.900');
+  }
+  
   body {
     font-family: 'Atkinson Hyperlegible', system-ui, sans-serif;
-    color: theme('colors.st_black');
+    color: var(--text-primary);
   }
 }
 
