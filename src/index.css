@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --text-primary: theme('colors.st_black');
+    --text-primary: #1A0D0A;
   }
   
   body {
