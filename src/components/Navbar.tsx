@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { useAuth } from "../context/AuthContext";
 import { Button } from "./ui/Button";
 import { Avatar } from "./ui/Avatar";
 import { Typography } from "./ui/Typography";
 
 export const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  
-  // Mock user data for now - will be replaced with actual auth later
-  const user = null; // Set to null to show signed-out state
+  const { user, signInWithGitHub, signOut } = useAuth();
   const displayName = user?.user_metadata?.user_name || user?.email;
 
   return (
@@ -64,12 +63,12 @@ export const Navbar = () => {
                 <Typography variant="body" className="text-st_black">
                   {displayName}
                 </Typography>
-                <Button variant="outline" size="sm">
+                <Button variant="outline" size="sm" onClick={signOut}>
                   Sign Out
                 </Button>
               </div>
             ) : (
-              <Button variant="primary" size="sm">
+              <Button variant="primary" size="sm" onClick={signInWithGitHub}>
                 Sign In
               </Button>
             )}
@@ -150,13 +149,13 @@ export const Navbar = () => {
                   <Typography variant="body" className="text-st_black flex-1">
                     {displayName}
                   </Typography>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={signOut}>
                     Sign Out
                   </Button>
                 </div>
               ) : (
                 <div className="px-3 py-2">
-                  <Button variant="primary" size="sm" className="w-full">
+                  <Button variant="primary" size="sm" className="w-full" onClick={signInWithGitHub}>
                     Sign In
                   </Button>
                 </div>

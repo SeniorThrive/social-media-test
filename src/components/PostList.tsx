@@ -30,26 +30,38 @@ export const PostList = () => {
 
   if (isLoading) {
     return (
-      <Typography variant="body">
-        Loading posts...
-      </Typography>
+      <div className="text-center py-8">
+        <Typography variant="body" className="text-st_taupe">
+          Loading posts...
+        </Typography>
+      </div>
     );
   }
 
   if (error) {
     return (
-      <Typography variant="body" className="text-st_dark_red">
-        Error: {error.message}
-      </Typography>
+      <div className="text-center py-8">
+        <Typography variant="body" className="text-st_dark_red">
+          Error: {error.message}
+        </Typography>
+      </div>
     );
   }
 
-  console.log(data);
+  if (!data || data.length === 0) {
+    return (
+      <div className="text-center py-8">
+        <Typography variant="body" className="text-st_taupe">
+          No posts available yet.
+        </Typography>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-wrap gap-6 justify-center">
-      {data?.map((post, key) => (
-        <PostItem post={post} key={key} />
+      {data.map((post) => (
+        <PostItem post={post} key={post.id} />
       ))}
     </div>
   );
