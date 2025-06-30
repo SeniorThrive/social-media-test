@@ -19,7 +19,7 @@ async function applyMigration() {
   try {
     console.log('Reading migration file...');
     
-    const migrationPath = join(process.cwd(), 'supabase', 'migrations', '20250629173134_throbbing_cloud.sql');
+    const migrationPath = join(process.cwd(), 'supabase', 'migrations', '20250630011006_add_community_image_url.sql');
     const migrationSQL = readFileSync(migrationPath, 'utf8');
     
     console.log('Applying migration to database...');
@@ -55,14 +55,20 @@ async function applyMigration() {
       console.log('Migration applied successfully via RPC');
     }
     
-    // Test the function
-    console.log('Testing get_posts_with_counts function...');
-    const { data: testData, error: testError } = await supabase.rpc('get_posts_with_counts');
+    // Test that the column was added
+    console.log('Testing communities table structure...');
+    const { data: testData, error: testError } = await supabase
+      .from('communities')
+      .select('id, name, description, image_url, created_at')
+      .limit(1);
     
     if (testError) {
-      console.log('Function test error (this might be normal if no data exists):', testError.message);
+      console.log('Table structure test error:', testError.message);
     } else {
-      console.log('Function test successful! Data:', testData);
+      console.log('Communities table structure verified successfully!');
+      if (testData && testData.length > 0) {
+        console.log('Sample record:', testData[0]);
+      }
     }
     
     console.log('Migration completed successfully!');
