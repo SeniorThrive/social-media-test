@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ChangeEvent, useState } from "react";
 import { useNavigate } from "react-router";
 import { supabase } from "../supabase-client";
+import { useAuth } from "../context/AuthContext";
 import { Button } from "./ui/Button";
 import { Input } from "./ui/Input";
 import { Textarea } from "./ui/Textarea";
@@ -58,6 +59,31 @@ export const CreateCommunity = () => {
   
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { profile } = useAuth();
+
+  // Redirect non-moderators
+  if (!profile?.is_moderator) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="p-8 max-w-md mx-auto text-center">
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+            </svg>
+          </div>
+          <Typography variant="h2" className="mb-4 text-gray-900">
+            Access Restricted
+          </Typography>
+          <Typography variant="body" className="text-gray-600 mb-6">
+            Only moderators can create new communities. If you believe you should have moderator access, please contact an administrator.
+          </Typography>
+          <Button variant="primary" onClick={() => navigate("/communities")}>
+            Browse Communities
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: (data: { community: CommunityInput; imageFile?: File }) =>
