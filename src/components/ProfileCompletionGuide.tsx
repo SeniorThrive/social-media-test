@@ -8,7 +8,7 @@ interface ProfileCompletionGuideProps {
 
 export const ProfileCompletionGuide = ({ profile }: ProfileCompletionGuideProps) => {
   const calculateCompletionScore = (): { score: number; total: number; missing: string[] } => {
-    if (!profile) return { score: 0, total: 8, missing: [] };
+    if (!profile) return { score: 0, total: 10, missing: [] };
 
     const fields = [
       { key: 'username', label: 'Username', value: profile.username },
@@ -19,6 +19,8 @@ export const ProfileCompletionGuide = ({ profile }: ProfileCompletionGuideProps)
       { key: 'phone', label: 'Phone Number', value: profile.phone },
       { key: 'avatar_url', label: 'Profile Photo', value: profile.avatar_url },
       { key: 'social', label: 'Social Media Links', value: profile.twitter_url || profile.linkedin_url || profile.instagram_url || profile.facebook_url },
+      { key: 'role_age_range', label: 'Role & Age Range', value: profile.role_age_range },
+      { key: 'fun_introduction', label: 'Fun Introduction', value: profile.fun_introduction },
     ];
 
     const completed = fields.filter(field => field.value && field.value.trim() !== '');
@@ -42,7 +44,7 @@ export const ProfileCompletionGuide = ({ profile }: ProfileCompletionGuideProps)
   };
 
   const getCompletionMessage = () => {
-    if (percentage === 100) return "🎉 Your profile is absolutely perfect! You're all set to make the most of SeniorThrive and connect with amazing people!";
+    if (percentage === 100) return "🎉 Your profile is absolutely perfect! You're all set to make the most of Thrive Nation and connect with amazing people!";
     if (percentage >= 80) return "🌟 Almost there! Just a few more details to make your profile shine even brighter!";
     if (percentage >= 60) return "✨ Great progress! Adding more information helps others connect with your awesome personality!";
     if (percentage >= 40) return "🚀 You're on your way! Complete more sections to unlock the full magic of our community!";

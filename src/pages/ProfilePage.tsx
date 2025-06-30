@@ -26,6 +26,8 @@ interface ProfileFormData {
   linkedin_url: string;
   instagram_url: string;
   facebook_url: string;
+  role_age_range: string;
+  fun_introduction: string;
 }
 
 interface ProfileUpdateData extends ProfileFormData {
@@ -87,6 +89,8 @@ export const ProfilePage = () => {
     linkedin_url: '',
     instagram_url: '',
     facebook_url: '',
+    role_age_range: '',
+    fun_introduction: '',
   });
 
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
@@ -115,6 +119,8 @@ export const ProfilePage = () => {
         linkedin_url: (profile as any).linkedin_url || '',
         instagram_url: (profile as any).instagram_url || '',
         facebook_url: (profile as any).facebook_url || '',
+        role_age_range: (profile as any).role_age_range || '',
+        fun_introduction: (profile as any).fun_introduction || '',
       });
       setAvatarPreview((profile as any).avatar_url || '');
     }
@@ -173,6 +179,10 @@ export const ProfilePage = () => {
 
     if (formData.bio && formData.bio.length > 500) {
       newErrors.bio = 'Bio must be less than 500 characters';
+    }
+
+    if (formData.fun_introduction && formData.fun_introduction.length > 200) {
+      newErrors.fun_introduction = 'Fun introduction must be less than 200 characters';
     }
 
     setErrors(newErrors);
@@ -254,6 +264,8 @@ export const ProfilePage = () => {
         linkedin_url: (profile as any).linkedin_url || '',
         instagram_url: (profile as any).instagram_url || '',
         facebook_url: (profile as any).facebook_url || '',
+        role_age_range: (profile as any).role_age_range || '',
+        fun_introduction: (profile as any).fun_introduction || '',
       });
       setAvatarPreview((profile as any).avatar_url || '');
     }
@@ -321,6 +333,8 @@ export const ProfilePage = () => {
             linkedin_url: importedData.linkedin_url || '',
             instagram_url: importedData.instagram_url || '',
             facebook_url: importedData.facebook_url || '',
+            role_age_range: importedData.role_age_range || '',
+            fun_introduction: importedData.fun_introduction || '',
           });
           setHasChanges(true);
         }
@@ -339,10 +353,10 @@ export const ProfilePage = () => {
       {/* Fun Header */}
       <div className="text-center mb-12">
         <Typography variant="h1" className="mb-4 text-5xl font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-          Your Amazing Profile ✨
+          Create Your Thrive Nation Profile ✨
         </Typography>
         <Typography variant="body" className="text-gray-600 text-xl max-w-3xl mx-auto">
-          Make your profile shine! Customize your information, connect with others, and show the world who you are 🌟
+          Your voice matters here! Take a minute to build your profile so others can find you, learn from you, and encourage you 🌟
         </Typography>
       </div>
 
@@ -377,13 +391,17 @@ export const ProfilePage = () => {
                     value={formData.username}
                     onChange={(e) => handleInputChange('username', e.target.value)}
                     error={!!errors.username}
-                    placeholder="Your awesome username"
+                    placeholder="GoldenGuru55"
                     className="rounded-xl border-2 p-4"
-                    aria-describedby={errors.username ? "username-error" : undefined}
+                    aria-describedby={errors.username ? "username-error" : "username-help"}
                   />
-                  {errors.username && (
+                  {errors.username ? (
                     <Typography variant="caption" className="text-red-600 mt-2 font-semibold" id="username-error">
                       {errors.username}
+                    </Typography>
+                  ) : (
+                    <Typography variant="caption" className="text-gray-500 mt-2" id="username-help">
+                      Choose a handle that shows who you are—feel free to get creative or keep it simple.
                     </Typography>
                   )}
                 </div>
@@ -397,9 +415,32 @@ export const ProfilePage = () => {
                     type="text"
                     value={formData.location}
                     onChange={(e) => handleInputChange('location', e.target.value)}
-                    placeholder="Where are you from?"
+                    placeholder="City, State or Region"
                     className="rounded-xl border-2 p-4"
                   />
+                  <Typography variant="caption" className="text-gray-500 mt-2">
+                    Let folks know where you're thriving from.
+                  </Typography>
+                </div>
+
+                <div>
+                  <label htmlFor="role_age_range" className="block text-sm font-bold text-gray-900 mb-3">
+                    Role & Age Range 👥
+                  </label>
+                  <select
+                    id="role_age_range"
+                    value={formData.role_age_range}
+                    onChange={(e) => handleInputChange('role_age_range', e.target.value)}
+                    className="w-full border-2 border-gray-200 rounded-xl py-4 px-4 text-base text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 bg-white"
+                  >
+                    <option value="">-- Select your role --</option>
+                    <option value="Older Adult (55+)">Older Adult (55+)</option>
+                    <option value="Family Member">Family Member</option>
+                    <option value="Caregiver">Caregiver</option>
+                  </select>
+                  <Typography variant="caption" className="text-gray-500 mt-2">
+                    Helps match you with the right conversations and resources.
+                  </Typography>
                 </div>
 
                 <div>
@@ -467,7 +508,7 @@ export const ProfilePage = () => {
                   value={formData.bio}
                   onChange={(e) => handleInputChange('bio', e.target.value)}
                   error={!!errors.bio}
-                  placeholder="Tell us your story... What makes you amazing? 🌟"
+                  placeholder="Tell us about yourself in one sentence."
                   rows={4}
                   className="rounded-xl border-2 p-4"
                   aria-describedby={errors.bio ? "bio-error" : "bio-help"}
@@ -479,11 +520,41 @@ export const ProfilePage = () => {
                     </Typography>
                   ) : (
                     <Typography variant="caption" className="text-gray-500" id="bio-help">
-                      Share what makes you unique! 💫
+                      Share your passion or purpose—why you're here in Thrive Nation.
                     </Typography>
                   )}
                   <Typography variant="caption" className={`font-semibold ${formData.bio.length > 450 ? 'text-red-500' : 'text-gray-500'}`}>
                     {formData.bio.length}/500
+                  </Typography>
+                </div>
+              </div>
+
+              <div className="mt-8">
+                <label htmlFor="fun_introduction" className="block text-sm font-bold text-gray-900 mb-3">
+                  Fun Introduction 🎭
+                </label>
+                <Textarea
+                  id="fun_introduction"
+                  value={formData.fun_introduction}
+                  onChange={(e) => handleInputChange('fun_introduction', e.target.value)}
+                  error={!!errors.fun_introduction}
+                  placeholder="If I had one superpower…"
+                  rows={3}
+                  className="rounded-xl border-2 p-4"
+                  aria-describedby={errors.fun_introduction ? "fun-intro-error" : "fun-intro-help"}
+                />
+                <div className="flex justify-between mt-2">
+                  {errors.fun_introduction ? (
+                    <Typography variant="caption" className="text-red-600 font-semibold" id="fun-intro-error">
+                      {errors.fun_introduction}
+                    </Typography>
+                  ) : (
+                    <Typography variant="caption" className="text-gray-500" id="fun-intro-help">
+                      Break the ice with a quip, hobby, or dream.
+                    </Typography>
+                  )}
+                  <Typography variant="caption" className={`font-semibold ${formData.fun_introduction.length > 180 ? 'text-red-500' : 'text-gray-500'}`}>
+                    {formData.fun_introduction.length}/200
                   </Typography>
                 </div>
               </div>
@@ -501,6 +572,10 @@ export const ProfilePage = () => {
                   Social Media Links 🔗
                 </Typography>
               </div>
+              
+              <Typography variant="body" className="text-gray-600 mb-6">
+                Want to keep the conversation going elsewhere? Drop your links so we can stay connected.
+              </Typography>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
@@ -713,6 +788,10 @@ export const ProfilePage = () => {
                 </Typography>
               </div>
               
+              <Typography variant="body" className="text-gray-600 mb-6">
+                A great photo helps others recognize and trust you.
+              </Typography>
+              
               <div className="mb-8">
                 <div className="relative inline-block">
                   <Avatar
@@ -745,11 +824,11 @@ export const ProfilePage = () => {
                 <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
-                Change Photo ✨
+                Upload Photo ✨
               </label>
               
               <Typography variant="caption" className="text-gray-500 block mt-4 text-sm" id="avatar-help">
-                JPG, PNG or GIF. Max size 5MB. 📏
+                Upload a clear, friendly headshot. JPG, PNG or GIF. Max size 5MB. 📏
               </Typography>
               
               {(errors as any).avatar && (
