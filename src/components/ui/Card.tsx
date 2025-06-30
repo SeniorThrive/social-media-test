@@ -13,21 +13,19 @@ export const Card: React.FC<CardProps> = ({
   onClick,
   variant = 'default'
 }) => {
-  const baseClasses = 'bg-white rounded-lg border border-gray-200';
+  const baseClasses = 'bg-white rounded-xl border border-gray-100';
   
   const variantClasses = {
-    default: 'shadow-facebook',
-    elevated: 'shadow-facebook-elevated',
-    interactive: 'shadow-facebook hover:shadow-facebook-hover transition-shadow duration-200 cursor-pointer'
+    default: 'shadow-sm',
+    elevated: 'shadow-lg',
+    interactive: 'shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer hover:-translate-y-1'
   };
 
   const classes = `${baseClasses} ${variantClasses[variant]} ${className}`;
 
   return (
     <div className={classes} onClick={onClick}>
-      <div className="p-4">
-        {children}
-      </div>
+      {children}
     </div>
   );
 };
