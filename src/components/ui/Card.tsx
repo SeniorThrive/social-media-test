@@ -4,7 +4,7 @@ interface CardProps {
   children: React.ReactNode;
   className?: string;
   onClick?: () => void;
-  variant?: 'default' | 'elevated' | 'interactive';
+  variant?: 'default' | 'elevated' | 'interactive' | 'glass' | 'gradient';
 }
 
 export const Card: React.FC<CardProps> = ({ 
@@ -13,12 +13,14 @@ export const Card: React.FC<CardProps> = ({
   onClick,
   variant = 'default'
 }) => {
-  const baseClasses = 'bg-white rounded-xl border border-gray-100';
+  const baseClasses = 'rounded-2xl border transition-all duration-300';
   
   const variantClasses = {
-    default: 'shadow-sm',
-    elevated: 'shadow-lg',
-    interactive: 'shadow-sm hover:shadow-lg transition-all duration-300 cursor-pointer hover:-translate-y-1'
+    default: 'bg-white border-gray-100 shadow-sm',
+    elevated: 'bg-white border-gray-100 shadow-lg',
+    interactive: 'bg-white border-gray-100 shadow-sm hover:shadow-xl cursor-pointer hover:-translate-y-1',
+    glass: 'bg-white/80 backdrop-blur-sm border-white/20 shadow-lg',
+    gradient: 'bg-gradient-to-br from-white to-gray-50 border-gray-100 shadow-sm'
   };
 
   const classes = `${baseClasses} ${variantClasses[variant]} ${className}`;

@@ -12,11 +12,11 @@ export const Navbar = () => {
 
   if (loading) {
     return (
-      <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4">
+      <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
                 <Typography variant="body" className="text-white font-bold text-lg">
                   ST
                 </Typography>
@@ -35,12 +35,12 @@ export const Navbar = () => {
   }
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm">
-      <div className="max-w-6xl mx-auto px-4">
+    <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md border-b border-gray-100 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-200">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform duration-200">
               <Typography variant="body" className="text-white font-bold text-lg">
                 ST
               </Typography>
@@ -54,19 +54,19 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center space-x-1">
             <Link
               to="/"
-              className="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              className="px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200 hover:scale-105"
             >
               Home
             </Link>
             <Link
               to="/create"
-              className="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              className="px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200 hover:scale-105"
             >
               Create Post
             </Link>
             <Link
               to="/communities"
-              className="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              className="px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200 hover:scale-105"
             >
               Communities
             </Link>
@@ -74,7 +74,7 @@ export const Navbar = () => {
             {profile?.is_moderator && (
               <Link
                 to="/community/create"
-                className="px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                className="px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200 hover:scale-105"
               >
                 Create Community
               </Link>
@@ -83,7 +83,7 @@ export const Navbar = () => {
             {profile?.is_moderator && (
               <Link
                 to="/moderation"
-                className="px-4 py-2.5 text-sm font-medium text-orange-600 hover:bg-orange-50 rounded-lg transition-colors duration-200"
+                className="px-4 py-2.5 text-sm font-semibold text-orange-600 hover:bg-orange-50 rounded-xl transition-all duration-200 hover:scale-105"
               >
                 Moderation
               </Link>
@@ -94,31 +94,31 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <div className="flex items-center space-x-3">
-                <Link to="/profile" className="flex items-center space-x-3 hover:bg-gray-100 rounded-lg p-2 transition-colors duration-200">
+                <Link to="/profile" className="flex items-center space-x-3 hover:bg-gray-100 rounded-xl p-3 transition-all duration-200 group">
                   <Avatar
                     src={user.user_metadata?.avatar_url}
                     alt="User Avatar"
                     fallback={displayName}
                     size="sm"
-                    className="ring-2 ring-blue-100"
+                    className="ring-2 ring-blue-100 group-hover:ring-blue-200 transition-all duration-200"
                   />
                   <div className="flex flex-col">
-                    <Typography variant="body" className="text-gray-900 font-medium text-sm">
+                    <Typography variant="body" className="text-gray-900 font-semibold text-sm">
                       {displayName}
                     </Typography>
                     {profile?.is_moderator && (
-                      <Typography variant="caption" className="text-orange-600 font-medium">
+                      <Typography variant="caption" className="text-orange-600 font-semibold">
                         Moderator
                       </Typography>
                     )}
                   </div>
                 </Link>
-                <Button variant="ghost" size="sm" onClick={signOut} className="rounded-lg">
+                <Button variant="ghost" size="sm" onClick={signOut} className="rounded-xl hover:bg-red-50 hover:text-red-600 transition-all duration-200">
                   Sign Out
                 </Button>
               </div>
             ) : (
-              <Button variant="primary" size="sm" onClick={signInWithGitHub} className="rounded-lg px-6 shadow-sm">
+              <Button variant="primary" size="sm" onClick={signInWithGitHub} className="rounded-xl px-6 shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 transition-all duration-200 hover:scale-105">
                 Sign In
               </Button>
             )}
@@ -128,7 +128,7 @@ export const Navbar = () => {
           <div className="md:hidden">
             <button
               onClick={() => setMenuOpen((prev) => !prev)}
-              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              className="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all duration-200"
               aria-label="Toggle menu"
             >
               <svg
@@ -160,25 +160,25 @@ export const Navbar = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white/95 backdrop-blur-sm border-t border-gray-100 shadow-lg">
+        <div className="md:hidden bg-white/95 backdrop-blur-md border-t border-gray-100 shadow-lg">
           <div className="px-4 py-3 space-y-1">
             <Link
               to="/"
-              className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              className="block px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200"
               onClick={() => setMenuOpen(false)}
             >
               Home
             </Link>
             <Link
               to="/create"
-              className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              className="block px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200"
               onClick={() => setMenuOpen(false)}
             >
               Create Post
             </Link>
             <Link
               to="/communities"
-              className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              className="block px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200"
               onClick={() => setMenuOpen(false)}
             >
               Communities
@@ -187,14 +187,14 @@ export const Navbar = () => {
               <>
                 <Link
                   to="/community/create"
-                  className="block px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                  className="block px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-100 rounded-xl transition-all duration-200"
                   onClick={() => setMenuOpen(false)}
                 >
                   Create Community
                 </Link>
                 <Link
                   to="/moderation"
-                  className="block px-4 py-3 text-sm font-medium text-orange-600 hover:bg-orange-50 rounded-lg transition-colors duration-200"
+                  className="block px-4 py-3 text-sm font-semibold text-orange-600 hover:bg-orange-50 rounded-xl transition-all duration-200"
                   onClick={() => setMenuOpen(false)}
                 >
                   Moderation
@@ -207,7 +207,7 @@ export const Navbar = () => {
                 <div className="space-y-2">
                   <Link
                     to="/profile"
-                    className="flex items-center space-x-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                    className="flex items-center space-x-3 px-4 py-3 hover:bg-gray-100 rounded-xl transition-all duration-200"
                     onClick={() => setMenuOpen(false)}
                   >
                     <Avatar
@@ -218,25 +218,25 @@ export const Navbar = () => {
                       className="ring-2 ring-blue-100"
                     />
                     <div className="flex flex-col">
-                      <Typography variant="body" className="text-gray-900 font-medium">
+                      <Typography variant="body" className="text-gray-900 font-semibold">
                         {displayName}
                       </Typography>
                       {profile?.is_moderator && (
-                        <Typography variant="caption" className="text-orange-600 font-medium">
+                        <Typography variant="caption" className="text-orange-600 font-semibold">
                           Moderator
                         </Typography>
                       )}
                     </div>
                   </Link>
                   <div className="px-4">
-                    <Button variant="ghost" size="sm" onClick={signOut} className="w-full rounded-lg">
+                    <Button variant="ghost" size="sm" onClick={signOut} className="w-full rounded-xl hover:bg-red-50 hover:text-red-600">
                       Sign Out
                     </Button>
                   </div>
                 </div>
               ) : (
                 <div className="px-4 py-3">
-                  <Button variant="primary" size="sm" className="w-full rounded-lg" onClick={signInWithGitHub}>
+                  <Button variant="primary" size="sm" className="w-full rounded-xl bg-gradient-to-r from-blue-600 to-purple-600" onClick={signInWithGitHub}>
                     Sign In
                   </Button>
                 </div>
