@@ -94,23 +94,25 @@ export const Navbar = () => {
           <div className="hidden md:flex items-center space-x-4">
             {user ? (
               <div className="flex items-center space-x-3">
-                <Avatar
-                  src={user.user_metadata?.avatar_url}
-                  alt="User Avatar"
-                  fallback={displayName}
-                  size="sm"
-                  className="ring-2 ring-blue-100"
-                />
-                <div className="flex flex-col">
-                  <Typography variant="body" className="text-gray-900 font-medium text-sm">
-                    {displayName}
-                  </Typography>
-                  {profile?.is_moderator && (
-                    <Typography variant="caption" className="text-orange-600 font-medium">
-                      Moderator
+                <Link to="/profile" className="flex items-center space-x-3 hover:bg-gray-100 rounded-lg p-2 transition-colors duration-200">
+                  <Avatar
+                    src={user.user_metadata?.avatar_url}
+                    alt="User Avatar"
+                    fallback={displayName}
+                    size="sm"
+                    className="ring-2 ring-blue-100"
+                  />
+                  <div className="flex flex-col">
+                    <Typography variant="body" className="text-gray-900 font-medium text-sm">
+                      {displayName}
                     </Typography>
-                  )}
-                </div>
+                    {profile?.is_moderator && (
+                      <Typography variant="caption" className="text-orange-600 font-medium">
+                        Moderator
+                      </Typography>
+                    )}
+                  </div>
+                </Link>
                 <Button variant="ghost" size="sm" onClick={signOut} className="rounded-lg">
                   Sign Out
                 </Button>
@@ -202,8 +204,12 @@ export const Navbar = () => {
             
             <div className="pt-3 border-t border-gray-100">
               {user ? (
-                <div className="flex items-center justify-between px-4 py-3">
-                  <div className="flex items-center space-x-3">
+                <div className="space-y-2">
+                  <Link
+                    to="/profile"
+                    className="flex items-center space-x-3 px-4 py-3 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                    onClick={() => setMenuOpen(false)}
+                  >
                     <Avatar
                       src={user.user_metadata?.avatar_url}
                       alt="User Avatar"
@@ -221,10 +227,12 @@ export const Navbar = () => {
                         </Typography>
                       )}
                     </div>
+                  </Link>
+                  <div className="px-4">
+                    <Button variant="ghost" size="sm" onClick={signOut} className="w-full rounded-lg">
+                      Sign Out
+                    </Button>
                   </div>
-                  <Button variant="ghost" size="sm" onClick={signOut} className="rounded-lg">
-                    Sign Out
-                  </Button>
                 </div>
               ) : (
                 <div className="px-4 py-3">
