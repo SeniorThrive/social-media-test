@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../supabase-client";
@@ -8,6 +8,8 @@ import { Input } from "../components/ui/Input";
 import { Textarea } from "../components/ui/Textarea";
 import { Typography } from "../components/ui/Typography";
 import { Avatar } from "../components/ui/Avatar";
+import { ImageCropModal } from "../components/ImageCropModal";
+import { ProfileCompletionGuide } from "../components/ProfileCompletionGuide";
 
 interface ProfileFormData {
   username: string;
@@ -20,6 +22,10 @@ interface ProfileFormData {
   privacy_profile: boolean;
   notifications_email: boolean;
   notifications_push: boolean;
+  twitter_url: string;
+  linkedin_url: string;
+  instagram_url: string;
+  facebook_url: string;
 }
 
 interface ProfileUpdateData extends ProfileFormData {
@@ -77,12 +83,19 @@ export const ProfilePage = () => {
     privacy_profile: false,
     notifications_email: true,
     notifications_push: false,
+    twitter_url: '',
+    linkedin_url: '',
+    instagram_url: '',
+    facebook_url: '',
   });
 
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string>('');
   const [errors, setErrors] = useState<Partial<ProfileFormData>>({});
   const [hasChanges, setHasChanges] = useState(false);
+  const [autoSaveStatus, setAutoSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const [showCropModal, setShowCropModal] = useState(false);
+  const [selectedImageSrc, setSelectedImageSrc] = useState<string>('');
 
   // Load existing profile data
   useEffect(() => {
@@ -98,6 +111,10 @@ export const ProfilePage = () => {
         privacy_profile: (profile as any).privacy_profile ?? false,
         notifications_email: (profile as any).notifications_email ?? true,
         notifications_push: (profile as any).notifications_push ?? false,
+        twitter_url: (profile as any).twitter_url || '',
+        linkedin_url: (profile as any).linkedin_url || '',
+        instagram_url: (profile as any).instagram_url || '',
+        facebook_url: (profile as any).facebook_url || '',
       });
       setAvatarPreview((profile as any).avatar_url || '');
     }
@@ -110,8 +127,25 @@ export const ProfilePage = () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
       setHasChanges(false);
       setAvatarFile(null);
+      setAutoSaveStatus('saved');
+      setTimeout(() => setAutoSaveStatus('idle'), 2000);
     },
   });
+
+  // Auto-save functionality with debounce
+  useEffect(() => {
+    if (!hasChanges || !validateForm()) return;
+
+    setAutoSaveStatus('saving');
+    const timeoutId = setTimeout(() => {
+      updateProfileMutation({
+        profileData: { ...formData, avatar_url: avatarPreview },
+        avatarFile: avatarFile || undefined,
+      });
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, [formData, hasChanges, avatarFile, avatarPreview]);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<ProfileFormData> = {};
@@ -125,10 +159,13 @@ export const ProfilePage = () => {
       newErrors.username = 'Username can only contain letters, numbers, and underscores';
     }
 
-    // Optional field validation
-    if (formData.website && !formData.website.match(/^https?:\/\/.+/)) {
-      newErrors.website = 'Website must be a valid URL (include http:// or https://)';
-    }
+    // URL validation for website and social media
+    const urlFields = ['website', 'twitter_url', 'linkedin_url', 'instagram_url', 'facebook_url'] as const;
+    urlFields.forEach(field => {
+      if (formData[field] && !formData[field].match(/^https?:\/\/.+/)) {
+        newErrors[field] = 'Must be a valid URL (include http:// or https://)';
+      }
+    });
 
     if (formData.phone && !formData.phone.match(/^[\+]?[1-9][\d]{0,15}$/)) {
       newErrors.phone = 'Please enter a valid phone number';
@@ -168,17 +205,26 @@ export const ProfilePage = () => {
         return;
       }
 
-      setAvatarFile(file);
-      setHasChanges(true);
-      
-      // Create preview
+      // Create preview for cropping
       const reader = new FileReader();
       reader.onload = (e) => {
-        setAvatarPreview(e.target?.result as string);
+        setSelectedImageSrc(e.target?.result as string);
+        setShowCropModal(true);
       };
       reader.readAsDataURL(file);
     }
   };
+
+  const handleCropComplete = useCallback((croppedImageBlob: Blob) => {
+    // Convert blob to file
+    const file = new File([croppedImageBlob], 'avatar.jpg', { type: 'image/jpeg' });
+    setAvatarFile(file);
+    setHasChanges(true);
+    
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(croppedImageBlob);
+    setAvatarPreview(previewUrl);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -204,12 +250,88 @@ export const ProfilePage = () => {
         privacy_profile: (profile as any).privacy_profile ?? false,
         notifications_email: (profile as any).notifications_email ?? true,
         notifications_push: (profile as any).notifications_push ?? false,
+        twitter_url: (profile as any).twitter_url || '',
+        linkedin_url: (profile as any).linkedin_url || '',
+        instagram_url: (profile as any).instagram_url || '',
+        facebook_url: (profile as any).facebook_url || '',
       });
       setAvatarPreview((profile as any).avatar_url || '');
     }
     setAvatarFile(null);
     setHasChanges(false);
     setErrors({});
+  };
+
+  const exportProfileData = () => {
+    if (!profile) return;
+
+    const exportData = {
+      ...profile,
+      exported_at: new Date().toISOString(),
+      export_version: '1.0'
+    };
+
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    const url = URL.createObjectURL(dataBlob);
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `profile_data_${new Date().toISOString().split('T')[0]}.json`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const importProfileData = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const importedData = JSON.parse(e.target?.result as string);
+        
+        // Validate imported data structure
+        const requiredFields = ['username'];
+        const hasRequiredFields = requiredFields.every(field => 
+          importedData.hasOwnProperty(field)
+        );
+
+        if (!hasRequiredFields) {
+          alert('Invalid profile data file. Missing required fields.');
+          return;
+        }
+
+        // Confirm import
+        if (window.confirm('This will replace your current profile data. Are you sure?')) {
+          setFormData({
+            username: importedData.username || '',
+            bio: importedData.bio || '',
+            location: importedData.location || '',
+            website: importedData.website || '',
+            birth_date: importedData.birth_date || '',
+            phone: importedData.phone || '',
+            privacy_email: importedData.privacy_email ?? true,
+            privacy_profile: importedData.privacy_profile ?? false,
+            notifications_email: importedData.notifications_email ?? true,
+            notifications_push: importedData.notifications_push ?? false,
+            twitter_url: importedData.twitter_url || '',
+            linkedin_url: importedData.linkedin_url || '',
+            instagram_url: importedData.instagram_url || '',
+            facebook_url: importedData.facebook_url || '',
+          });
+          setHasChanges(true);
+        }
+      } catch (error) {
+        alert('Invalid JSON file. Please select a valid profile data file.');
+      }
+    };
+    reader.readAsText(file);
+    
+    // Reset file input
+    e.target.value = '';
   };
 
   if (!user) {
@@ -239,6 +361,9 @@ export const ProfilePage = () => {
             Manage your profile information and privacy settings
           </Typography>
         </div>
+
+        {/* Profile Completion Guide */}
+        <ProfileCompletionGuide profile={profile} />
 
         <form onSubmit={handleSubmit} className="space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -363,6 +488,91 @@ export const ProfilePage = () => {
                     <Typography variant="caption" className="text-gray-500">
                       {formData.bio.length}/500
                     </Typography>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Social Media Links */}
+              <Card className="p-6">
+                <Typography variant="h2" className="mb-6 text-xl font-semibold text-gray-900">
+                  Social Media Links
+                </Typography>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="twitter_url" className="block text-sm font-medium text-gray-900 mb-2">
+                      Twitter/X Profile
+                    </label>
+                    <Input
+                      id="twitter_url"
+                      type="url"
+                      value={formData.twitter_url}
+                      onChange={(e) => handleInputChange('twitter_url', e.target.value)}
+                      error={!!errors.twitter_url}
+                      placeholder="https://twitter.com/yourusername"
+                    />
+                    {errors.twitter_url && (
+                      <Typography variant="caption" className="text-red-600 mt-1">
+                        {errors.twitter_url}
+                      </Typography>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="linkedin_url" className="block text-sm font-medium text-gray-900 mb-2">
+                      LinkedIn Profile
+                    </label>
+                    <Input
+                      id="linkedin_url"
+                      type="url"
+                      value={formData.linkedin_url}
+                      onChange={(e) => handleInputChange('linkedin_url', e.target.value)}
+                      error={!!errors.linkedin_url}
+                      placeholder="https://linkedin.com/in/yourusername"
+                    />
+                    {errors.linkedin_url && (
+                      <Typography variant="caption" className="text-red-600 mt-1">
+                        {errors.linkedin_url}
+                      </Typography>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="instagram_url" className="block text-sm font-medium text-gray-900 mb-2">
+                      Instagram Profile
+                    </label>
+                    <Input
+                      id="instagram_url"
+                      type="url"
+                      value={formData.instagram_url}
+                      onChange={(e) => handleInputChange('instagram_url', e.target.value)}
+                      error={!!errors.instagram_url}
+                      placeholder="https://instagram.com/yourusername"
+                    />
+                    {errors.instagram_url && (
+                      <Typography variant="caption" className="text-red-600 mt-1">
+                        {errors.instagram_url}
+                      </Typography>
+                    )}
+                  </div>
+
+                  <div>
+                    <label htmlFor="facebook_url" className="block text-sm font-medium text-gray-900 mb-2">
+                      Facebook Profile
+                    </label>
+                    <Input
+                      id="facebook_url"
+                      type="url"
+                      value={formData.facebook_url}
+                      onChange={(e) => handleInputChange('facebook_url', e.target.value)}
+                      error={!!errors.facebook_url}
+                      placeholder="https://facebook.com/yourusername"
+                    />
+                    {errors.facebook_url && (
+                      <Typography variant="caption" className="text-red-600 mt-1">
+                        {errors.facebook_url}
+                      </Typography>
+                    )}
                   </div>
                 </div>
               </Card>
@@ -548,7 +758,16 @@ export const ProfilePage = () => {
                   </Button>
                 </div>
 
-                {hasChanges && (
+                {/* Auto-save status */}
+                {autoSaveStatus !== 'idle' && (
+                  <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                    <Typography variant="caption" className="text-blue-800">
+                      {autoSaveStatus === 'saving' ? '💾 Auto-saving...' : '✅ All changes saved'}
+                    </Typography>
+                  </div>
+                )}
+
+                {hasChanges && autoSaveStatus === 'idle' && (
                   <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
                     <Typography variant="caption" className="text-yellow-800">
                       You have unsaved changes
@@ -564,9 +783,61 @@ export const ProfilePage = () => {
                   </div>
                 )}
               </Card>
+
+              {/* Data Management */}
+              <Card className="p-6">
+                <Typography variant="h2" className="mb-6 text-xl font-semibold text-gray-900">
+                  Data Management
+                </Typography>
+                
+                <div className="space-y-3">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={exportProfileData}
+                    className="w-full"
+                  >
+                    <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    Export Profile Data
+                  </Button>
+                  
+                  <div>
+                    <input
+                      type="file"
+                      id="import-profile"
+                      accept=".json"
+                      onChange={importProfileData}
+                      className="hidden"
+                    />
+                    <label
+                      htmlFor="import-profile"
+                      className="w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500 cursor-pointer"
+                    >
+                      <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                      </svg>
+                      Import Profile Data
+                    </label>
+                  </div>
+                </div>
+                
+                <Typography variant="caption" className="text-gray-500 block mt-3">
+                  Export your profile data as JSON or import from a previous backup.
+                </Typography>
+              </Card>
             </div>
           </div>
         </form>
+
+        {/* Image Crop Modal */}
+        <ImageCropModal
+          isOpen={showCropModal}
+          imageSrc={selectedImageSrc}
+          onClose={() => setShowCropModal(false)}
+          onCropComplete={handleCropComplete}
+        />
       </div>
     </div>
   );
