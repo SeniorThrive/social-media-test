@@ -113,15 +113,19 @@ export const CommunityList = () => {
   if (isLoading)
     return (
       <div className="text-center py-12">
-        <div className="animate-pulse space-y-6 max-w-6xl mx-auto">
+        <div className="space-y-8 max-w-6xl mx-auto">
           {[...Array(6)].map((_, i) => (
-            <Card key={i} className="p-8">
+            <Card key={i} variant="glass" className="p-8 animate-shimmer">
               <div className="flex items-center space-x-6">
-                <div className="w-20 h-20 bg-gray-200 rounded-2xl"></div>
-                <div className="flex-1 space-y-3">
-                  <div className="h-6 bg-gray-200 rounded w-1/3"></div>
-                  <div className="h-4 bg-gray-200 rounded w-2/3"></div>
-                  <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                <div className="skeleton w-24 h-24 rounded-2xl"></div>
+                <div className="flex-1 space-y-4">
+                  <div className="skeleton-title"></div>
+                  <div className="skeleton-text"></div>
+                  <div className="skeleton-text w-3/4"></div>
+                  <div className="flex space-x-4">
+                    <div className="skeleton w-20 h-6 rounded-full"></div>
+                    <div className="skeleton w-16 h-6 rounded-full"></div>
+                  </div>
                 </div>
               </div>
             </Card>
@@ -138,32 +142,32 @@ export const CommunityList = () => {
         </Typography>
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {mockCommunities.map((community) => (
-            <Card key={community.id} variant="interactive" className="overflow-hidden group">
+            <Card key={community.id} variant="glass" className="overflow-hidden group card-hover">
               <Link to={`/community/${community.id}`} className="block">
                 <div className="relative">
                   <img 
                     src={community.image_url} 
                     alt={community.name}
-                    className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-                  <div className={`absolute top-4 left-4 w-4 h-4 rounded-full ${community.color} shadow-lg`}></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent"></div>
+                  <div className={`absolute top-4 left-4 w-4 h-4 rounded-full ${community.color} shadow-lg animate-pulse-glow`}></div>
                   
-                  {/* Floating stats */}
+                  {/* Enhanced floating stats */}
                   <div className="absolute bottom-4 left-4 right-4">
                     <div className="flex items-center justify-between text-white">
-                      <div className="flex items-center space-x-4">
-                        <div className="flex items-center space-x-1 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-2 glass rounded-full px-4 py-2 shadow-modern">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                           </svg>
-                          <span className="text-sm font-semibold">{community.member_count.toLocaleString()}</span>
+                          <span className="text-sm font-bold">{community.member_count.toLocaleString()}</span>
                         </div>
-                        <div className="flex items-center space-x-1 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                        <div className="flex items-center space-x-2 glass rounded-full px-4 py-2 shadow-modern">
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                           </svg>
-                          <span className="text-sm font-semibold">{community.post_count}</span>
+                          <span className="text-sm font-bold">{community.post_count}</span>
                         </div>
                       </div>
                     </div>
@@ -174,22 +178,22 @@ export const CommunityList = () => {
                   <Typography variant="h3" className="text-gray-900 mb-3 font-bold text-xl group-hover:text-blue-600 transition-colors">
                     {community.name}
                   </Typography>
-                  <Typography variant="body" className="text-gray-600 line-clamp-2 leading-relaxed mb-4">
+                  <Typography variant="body" className="text-gray-600 line-clamp-2 leading-relaxed mb-5">
                     {community.description}
                   </Typography>
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2 text-gray-500">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                      <Typography variant="caption" className="font-medium">
+                      <Typography variant="caption" className="font-semibold">
                         Active community
                       </Typography>
                     </div>
-                    <div className="flex items-center space-x-2 text-blue-600 group-hover:translate-x-1 transition-transform duration-200">
-                      <Typography variant="caption" className="font-semibold">
+                    <div className="flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full group-hover:translate-x-1 transition-all duration-200 shadow-lg hover:shadow-xl">
+                      <Typography variant="caption" className="font-bold">
                         Join now
                       </Typography>
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </div>
@@ -206,32 +210,32 @@ export const CommunityList = () => {
     <div className="max-w-6xl mx-auto px-4">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {data?.map((community) => (
-          <Card key={community.id} variant="interactive" className="overflow-hidden group">
+          <Card key={community.id} variant="glass" className="overflow-hidden group card-hover bg-white/90 backdrop-blur-sm border border-white/20 shadow-modern">
             <Link to={`/community/${community.id}`} className="block">
               <div className="relative">
                 <img 
                   src={community.image_url} 
                   alt={community.name}
-                  className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
-                <div className={`absolute top-4 left-4 w-4 h-4 rounded-full ${community.color} shadow-lg`}></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-transparent"></div>
+                <div className={`absolute top-4 left-4 w-4 h-4 rounded-full ${community.color} shadow-lg animate-pulse-glow`}></div>
                 
-                {/* Floating stats */}
+                {/* Enhanced floating stats */}
                 <div className="absolute bottom-4 left-4 right-4">
                   <div className="flex items-center justify-between text-white">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center space-x-1 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                    <div className="flex items-center space-x-3">
+                      <div className="flex items-center space-x-2 glass rounded-full px-4 py-2 shadow-modern">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                         </svg>
-                        <span className="text-sm font-semibold">{community.member_count.toLocaleString()}</span>
+                        <span className="text-sm font-bold">{community.member_count.toLocaleString()}</span>
                       </div>
-                      <div className="flex items-center space-x-1 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1">
+                      <div className="flex items-center space-x-2 glass rounded-full px-4 py-2 shadow-modern">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                         </svg>
-                        <span className="text-sm font-semibold">{community.post_count}</span>
+                        <span className="text-sm font-bold">{community.post_count}</span>
                       </div>
                     </div>
                   </div>
@@ -242,22 +246,22 @@ export const CommunityList = () => {
                 <Typography variant="h3" className="text-gray-900 mb-3 font-bold text-xl group-hover:text-blue-600 transition-colors">
                   {community.name}
                 </Typography>
-                <Typography variant="body" className="text-gray-600 line-clamp-2 leading-relaxed mb-4">
+                <Typography variant="body" className="text-gray-600 line-clamp-2 leading-relaxed mb-5">
                   {community.description}
                 </Typography>
                 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2 text-gray-500">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <Typography variant="caption" className="font-medium">
+                    <Typography variant="caption" className="font-semibold">
                       Active community
                     </Typography>
                   </div>
-                  <div className="flex items-center space-x-2 text-blue-600 group-hover:translate-x-1 transition-transform duration-200">
-                    <Typography variant="caption" className="font-semibold">
+                  <div className="flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-full group-hover:translate-x-1 transition-all duration-200 shadow-lg hover:shadow-xl btn-hover-lift">
+                    <Typography variant="caption" className="font-bold">
                       Join now
                     </Typography>
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                   </div>
