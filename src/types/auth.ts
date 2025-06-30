@@ -18,6 +18,8 @@ export interface UserProfile {
   linkedin_url?: string;
   instagram_url?: string;
   facebook_url?: string;
+  role_age_range?: string;
+  fun_introduction?: string;
 }
 
 export interface Report {

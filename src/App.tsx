@@ -8,6 +8,8 @@ import { CommunitiesPage } from "./pages/CommunitiesPage";
 import { CommunityPage } from "./pages/CommunityPage";
 import { ModerationPage } from "./pages/ModerationPage";
 import { ProfilePage } from "./pages/ProfilePage";
+import { WelcomeScreen } from "./pages/WelcomeScreen";
+import { CreateProfilePromptScreen } from "./pages/CreateProfilePromptScreen";
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
       <div className="pt-14">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/welcome" element={<WelcomeScreen />} />
+          <Route path="/create-profile-prompt" element={<CreateProfilePromptScreen />} />
           <Route path="/create" element={<CreatePostPage />} />
           <Route path="/post/:id" element={<PostPage />} />
           <Route path="/community/create" element={<CreateCommunityPage />} />
